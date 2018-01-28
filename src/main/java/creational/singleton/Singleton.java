@@ -5,7 +5,7 @@ package creational.singleton;
  */
 public class Singleton {
     private String name;
-    private static Singleton instance;
+    private static volatile Singleton instance;
 
     public String getName() {
         return name;
@@ -15,9 +15,13 @@ public class Singleton {
         name = "Single Instance";
     }
 
-    public static synchronized Singleton getInstance() {
+    public static Singleton getInstance() {
         if (instance == null)
-            instance = new Singleton();
+            synchronized (Singleton.class) {
+                if (instance == null) {
+                    instance = new Singleton();
+                }
+            }
 
         return instance;
     }
